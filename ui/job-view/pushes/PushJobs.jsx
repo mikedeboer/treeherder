@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import isEqual from 'lodash/isEqual';
 
 import { thSimplePlatforms } from '../../helpers/constants';
 import { withPinnedJobs } from '../context/PinnedJobs';
@@ -14,31 +15,34 @@ import { withPushes } from '../context/Pushes';
 import Platform from './Platform';
 
 class PushJobs extends React.Component {
-  static getDerivedStateFromProps(nextProps) {
-    const { filterModel, push, platforms, runnableVisible } = nextProps;
-    const selectedJobId = parseInt(getUrlParam('selectedJob'), 10);
-    const filteredPlatforms = platforms.reduce((acc, platform) => {
-      const thisPlatform = { ...platform };
-      const suffix =
-        thSimplePlatforms.includes(platform.name) && platform.option === 'opt'
-          ? ''
-          : ` ${platform.option}`;
-      thisPlatform.title = `${thisPlatform.name}${suffix}`;
-      thisPlatform.visible = true;
-      return [
-        ...acc,
-        PushJobs.filterPlatform(
-          thisPlatform,
-          selectedJobId,
-          push,
-          filterModel,
-          runnableVisible,
-        ),
-      ];
-    }, []);
-
-    return { filteredPlatforms };
-  }
+  // static getDerivedStateFromProps(nextProps) {
+  // const { filterModel, push, platforms, runnableVisible } = nextProps;
+  // const selectedJobId = parseInt(getUrlParam('selectedJob'), 10);
+  // // maybe I can use isEqual to see if I should re-create filteredPlatforms.
+  // // This is causing a re-render each time because it is a new instance.
+  // // so shouldComponentUpdate isn't stopping it.
+  // const filteredPlatforms = platforms.reduce((acc, platform) => {
+  //   const thisPlatform = { ...platform };
+  //   const suffix =
+  //     thSimplePlatforms.includes(platform.name) && platform.option === 'opt'
+  //       ? ''
+  //       : ` ${platform.option}`;
+  //   thisPlatform.title = `${thisPlatform.name}${suffix}`;
+  //   thisPlatform.visible = true;
+  //   return [
+  //     ...acc,
+  //     PushJobs.filterPlatform(
+  //       thisPlatform,
+  //       selectedJobId,
+  //       push,
+  //       filterModel,
+  //       runnableVisible,
+  //     ),
+  //   ];
+  // }, []);
+  //
+  // return { filteredPlatforms };
+  // }
 
   static filterPlatform(
     platform,
@@ -76,6 +80,78 @@ class PushJobs extends React.Component {
       filteredPlatforms: [],
     };
   }
+
+  componentDidMount() {
+    this.updateFilteredJobs();
+  }
+
+  shouldComponentUpdate(prevProps, prevState) {
+    const {
+      push,
+      filterModel,
+      duplicateJobsVisible,
+      groupCountsExpanded,
+    } = this.props;
+    const { filteredPlatforms } = this.state;
+
+    // console.log(
+    //   'should in pushjobs',
+    //   prevProps.push !== push,
+    //   prevProps.filterModel !== filterModel,
+    //   prevProps.duplicateJobsVisible !== duplicateJobsVisible,
+    //   prevProps.groupCountsExpanded !== groupCountsExpanded,
+    //   !isEqual(prevState.filteredPlatforms, filteredPlatforms),
+    //   prevState.filteredPlatforms,
+    //   filteredPlatforms,
+    // );
+    return (
+      prevProps.push !== push ||
+      prevProps.filterModel !== filterModel ||
+      prevProps.duplicateJobsVisible !== duplicateJobsVisible ||
+      prevProps.groupCountsExpanded !== groupCountsExpanded ||
+      !isEqual(prevState.filteredPlatforms, filteredPlatforms)
+    );
+  }
+
+  componentDidUpdate(prevProps) {
+    const { filterModel, platforms } = this.props;
+
+    if (
+      !isEqual(prevProps.filterModel.urlParams, filterModel.urlParams) ||
+      prevProps.platforms !== platforms
+    ) {
+      this.updateFilteredJobs();
+    }
+  }
+
+  updateFilteredJobs = () => {
+    const { filterModel, push, platforms, runnableVisible } = this.props;
+    const selectedJobId = parseInt(getUrlParam('selectedJob'), 10);
+    // maybe I can use isEqual to see if I should re-create filteredPlatforms.
+    // This is causing a re-render each time because it is a new instance.
+    // so shouldComponentUpdate isn't stopping it.
+    const filteredPlatforms = platforms.reduce((acc, platform) => {
+      const thisPlatform = { ...platform };
+      const suffix =
+        thSimplePlatforms.includes(platform.name) && platform.option === 'opt'
+          ? ''
+          : ` ${platform.option}`;
+      thisPlatform.title = `${thisPlatform.name}${suffix}`;
+      thisPlatform.visible = true;
+      return [
+        ...acc,
+        PushJobs.filterPlatform(
+          thisPlatform,
+          selectedJobId,
+          push,
+          filterModel,
+          runnableVisible,
+        ),
+      ];
+    }, []);
+
+    this.setState({ filteredPlatforms });
+  };
 
   onMouseDown = ev => {
     const { selectedJob, togglePinJob } = this.props;

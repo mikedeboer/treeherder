@@ -49,6 +49,8 @@ class SecondaryNavBar extends React.PureComponent {
   }
 
   handleUrlChanges = () => {
+    // console.log('handleUrlChanges SecondaryNavBar');
+
     this.setState({
       searchQueryStr: getSearchStrFromUrl(),
     });

@@ -106,10 +106,16 @@ class Push extends React.Component {
   }
 
   handleUrlChanges = () => {
+    // console.log('handleUrlChanges Push');
     const { push } = this.props;
+    const { collapsed } = this.state;
     const collapsedPushes = getUrlParam('collapsedPushes') || '';
+    const newCollapsed = collapsedPushes.includes(push.id);
 
-    this.setState({ collapsed: collapsedPushes.includes(push.id) });
+    if (collapsed !== newCollapsed) {
+      // console.log('handleUrlChanges push called');
+      this.setState({ collapsed: newCollapsed });
+    }
   };
 
   handleApplyNewJobs = event => {
