@@ -130,6 +130,9 @@ module.exports = {
           },
         ]);
 
+      // Force bundled dependencies to use the ES6 version of lodash.
+      neutrino.config.resolve.alias.set('lodash', 'lodash-es');
+
       if (process.env.NODE_ENV === 'production') {
         // Fail the build if these file size thresholds (in bytes) are exceeded,
         // to help prevent unknowingly regressing the bundle size (bug 1384255).

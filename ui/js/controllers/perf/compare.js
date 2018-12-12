@@ -1,7 +1,6 @@
 // Remove the eslint-disable when rewriting this file during the React conversion.
 /* eslint-disable func-names, object-shorthand, prefer-arrow-callback, prefer-destructuring, prefer-template, radix */
-import isEqual from 'lodash/isEqual';
-import difference from 'lodash/difference';
+import { isEqual, difference } from 'lodash-es';
 import metricsgraphics from 'metrics-graphics';
 
 import perf from '../../perf';

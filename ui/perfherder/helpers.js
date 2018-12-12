@@ -1,6 +1,5 @@
-import chunk from 'lodash/chunk';
+import { chunk, sortBy } from 'lodash-es';
 import numeral from 'numeral';
-import sortBy from 'lodash/sortBy';
 
 import { getApiUrl, createQueryParams, repoEndpoint } from '../helpers/url';
 import { create, getData, update } from '../helpers/http';

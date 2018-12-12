@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import isEqual from 'lodash/isEqual';
+import { isEqual } from 'lodash-es';
 
 import { loggedOutUser } from '../../helpers/auth';
 import taskcluster from '../../helpers/taskcluster';
