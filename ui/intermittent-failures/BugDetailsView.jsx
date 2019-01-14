@@ -5,10 +5,14 @@ import Icon from 'react-fontawesome';
 import ReactTable from 'react-table';
 import PropTypes from 'prop-types';
 
-import { bugDetailsEndpoint, getJobsUrl } from '../helpers/url';
+import {
+  bugDetailsEndpoint,
+  getJobsUrl,
+  getLogViewerUrl,
+} from '../helpers/url';
+import SimpleTooltip from '../shared/SimpleTooltip';
 
 import { calculateMetrics, prettyDate, tableRowStyling } from './helpers';
-import BugLogColumn from './BugLogColumn';
 import Layout from './Layout';
 import withView from './View';
 import DateOptions from './DateOptions';
@@ -76,7 +80,43 @@ const BugDetailsView = props => {
     {
       Header: 'Log',
       accessor: 'job_id',
-      Cell: props => <BugLogColumn {...props} />,
+      Cell: _props => {
+        const { value, original } = _props;
+        return (
+          <SimpleTooltip
+            text={
+              <React.Fragment>
+                {`${original.lines.length} unexpected-fail${
+                  original.lines.length > 1 ? 's' : ''
+                }`}
+                <br />
+                <a
+                  className="small-text"
+                  href={getLogViewerUrl(value, original.tree)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  view details
+                </a>
+              </React.Fragment>
+            }
+            tooltipText={
+              original.lines.length > 0 && (
+                <ul>
+                  {original.lines.map((line, index) => (
+                    <li
+                      key={index} // eslint-disable-line react/no-array-index-key
+                      className="failure_li text-truncate"
+                    >
+                      {line}
+                    </li>
+                  ))}
+                </ul>
+              )
+            }
+          />
+        );
+      },
       minWidth: 110,
     },
   ];

@@ -14,7 +14,7 @@ treeherder.filter('getRevisionUrl', function () {
         return '';
     };
 });
-
+// TODO replace usage with displayNumber in helpers file
 treeherder.filter('displayNumber', ['$filter', function ($filter) {
     return function (input) {
         if (Number.isNaN(input)) {
@@ -30,7 +30,7 @@ treeherder.filter('absoluteValue', function () {
         return Math.abs(input);
     };
 });
-
+// TODO remove
 treeherder.filter('abbreviatedNumber', function () {
     return input =>
         ((input.toString().length <= 5) ? input : numeral(input).format('0.0a'));

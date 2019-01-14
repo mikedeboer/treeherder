@@ -15,6 +15,9 @@ import {
 
 import { endpoints, tValueCareMin, tValueConfidence } from './constants';
 
+export const displayNumber = input =>
+  Number.isNaN(input) ? 'N/A' : input.toFixed(2);
+
 export const calcPercentOf = function calcPercentOf(a, b) {
   return b ? (100 * a) / b : 0;
 };
