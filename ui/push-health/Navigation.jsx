@@ -11,7 +11,7 @@ export default class Navigation extends React.PureComponent {
 
     return (
       <Navbar dark color="dark">
-        <LogoMenu menuText="Push Health View" />
+        <LogoMenu menuText="Push Health" />
         <Login user={user} setUser={setUser} />
       </Navbar>
     );

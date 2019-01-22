@@ -19,7 +19,7 @@ const App = () => (
         <Switch>
           <Route
             exact
-            path="/pushhealthview.html"
+            path="/pushhealth.html"
             render={props =>
               hasProps(props.location.search) ? (
                 <Health {...props} />
@@ -27,11 +27,6 @@ const App = () => (
                 <NotFound {...props} />
               )
             }
-          />
-          <Route
-            name="search"
-            path="?revision=:revision&repo=:repo"
-            handler={Health}
           />
           <Route name="notfound" component={NotFound} />
         </Switch>

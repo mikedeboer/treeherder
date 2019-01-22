@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Table, Container } from 'reactstrap';
-import Icon from 'react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import { getJobsUrl } from '../helpers/url';
 
@@ -82,7 +83,7 @@ export default class Health extends React.Component {
             </div>
           ) : (
             <div>
-              <Icon name="spinner" size="2x" spin />
+              <FontAwesomeIcon icon={faSpinner} size="2x" spin />
             </div>
           )}
         </Container>

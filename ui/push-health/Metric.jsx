@@ -1,6 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faPlusSquare,
+  faMinusSquare
+} from '@fortawesome/free-regular-svg-icons';
 
 import { resultColorMap } from './helpers';
 
@@ -23,7 +27,8 @@ export default class Metric extends React.PureComponent {
     const { detailsShowing } = this.state;
     const { result, name, value, details } = this.props;
     const resultColor = resultColorMap[result];
-    const expandIcon = detailsShowing ? 'minus-square-o' : 'plus-square-o';
+    const expandIcon = detailsShowing ? faMinusSquare : faPlusSquare;
+
     return (
       <td>
         <div className="d-flex flex-row">
@@ -32,7 +37,7 @@ export default class Metric extends React.PureComponent {
             <h3>
               {name}
               <span onClick={this.toggleDetails} className="btn btn-lg">
-                <Icon name={`${expandIcon}`} />
+                <FontAwesomeIcon icon={expandIcon} />
               </span>
             </h3>
             {detailsShowing && (
